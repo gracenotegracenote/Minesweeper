@@ -94,7 +94,12 @@ public class Main extends Application {
 
                             gameOver();
                         } else {
-                            group.getChildren().add(tile);
+                            ImageView img = getImageView(x, y);
+                            if (img != null) {
+                                group.getChildren().add(img);
+                            } else {
+                                group.getChildren().add(tile);
+                            }
                         }
                     }
                 });
@@ -147,5 +152,108 @@ public class Main extends Application {
         gameOverStage.setTitle(GAME_OVER);
         gameOverStage.setScene(gameOverScene);
         gameOverStage.show();
+    }
+
+    private ImageView getImageView(int x, int y) {
+        int indexX = x / Tile.SIZE;
+        int indexY = y / Tile.SIZE;
+        Tile tile = tileBoard[indexX][indexY];
+
+        int bombsCount = getBombsCount(tile);
+
+        if (bombsCount <= 0) return null;
+
+        String imageUrl;
+        switch(bombsCount) {
+            case 1: imageUrl = "images/1.png"; break;
+            case 2: imageUrl = "images/2.png"; break;
+            case 3: imageUrl = "images/3.png"; break;
+            case 4: imageUrl = "images/4.png"; break;
+            case 5: imageUrl = "images/5.png"; break;
+            case 6: imageUrl = "images/6.png"; break;
+            case 7: imageUrl = "images/7.png"; break;
+            case 8: imageUrl = "images/8.png"; break;
+            default: return null;
+        }
+
+        ImageView img = new ImageView(imageUrl);
+        img.setLayoutX(x);
+        img.setLayoutY(y);
+        img.setFitWidth(Tile.SIZE);
+        img.setFitHeight(Tile.SIZE);
+
+        return img;
+    }
+
+    private int getBombsCount(Tile t) {
+        //exclusion of tiles with bombs
+        if (t.hasBomb()) return -1;
+
+        int x = (int) t.getLayoutX() / Tile.SIZE;
+        int y = (int) t.getLayoutY() / Tile.SIZE;
+        int sum = 0;
+
+        if (getTileBottomLeft(x, y) != null && getTileBottomLeft(x, y).hasBomb()) sum++;
+        if (getTileBottomCenter(x, y) != null && getTileBottomCenter(x, y).hasBomb()) sum++;
+        if (getTileBottomRight(x, y) != null && getTileBottomRight(x, y).hasBomb()) sum++;
+        if (getTileLeft(x, y) != null && getTileLeft(x, y).hasBomb()) sum++;
+        if (getTileRight(x, y) != null && getTileRight(x, y).hasBomb()) sum++;
+        if (getTileBelowLeft(x, y) != null && getTileBelowLeft(x, y).hasBomb()) sum++;
+        if (getTileBelowCenter(x, y) != null && getTileBelowCenter(x, y).hasBomb()) sum++;
+        if (getTileBelowRight(x, y) != null && getTileBelowRight(x, y).hasBomb()) sum++;
+
+        return sum;
+    }
+
+    private Tile getTileBottomLeft(int x, int y) {
+        if (y == 0 || x == 0) return null;
+
+        return tileBoard[x - 1][y - 1];
+    }
+
+    private Tile getTileBottomCenter(int x, int y) {
+        if (y == 0) return null;
+
+        return tileBoard[x][y - 1];
+    }
+
+    private Tile getTileBottomRight(int x, int y) {
+        if (y == 0 || x == tileBoard[0].length - 1) return null;
+
+        return tileBoard[x + 1][y - 1];
+    }
+
+    private Tile getTileLeft(int x, int y) {
+        if (x == 0) {
+            return null;
+        }
+
+        return tileBoard[x - 1][y];
+    }
+
+    private Tile getTileRight(int x, int y) {
+        if (x == tileBoard[0].length - 1) {
+            return null;
+        }
+
+        return tileBoard[x + 1][y];
+    }
+
+    private Tile getTileBelowLeft(int x, int y) {
+        if (y == tileBoard.length - 1 || x == 0) return null;
+
+        return tileBoard[x - 1][y + 1];
+    }
+
+    private Tile getTileBelowCenter(int x, int y) {
+        if (y == tileBoard.length - 1) return null;
+
+        return tileBoard[x][y + 1];
+    }
+
+    private Tile getTileBelowRight(int x, int y) {
+        if (y == tileBoard.length - 1 || x == tileBoard.length - 1) return null;
+
+        return tileBoard[x + 1][y + 1];
     }
 }
