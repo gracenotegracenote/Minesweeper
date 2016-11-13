@@ -1,8 +1,9 @@
 package sample;
 
 import javafx.scene.image.ImageView;
-import views.BombGenerator;
-import views.Tile;
+import models.Board;
+import models.BombGenerator;
+import models.Tile;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -12,6 +13,11 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import views.BoardView;
+import views.TileView;
+
+import java.util.List;
+import java.util.Set;
 
 public class Main extends Application {
     public static final String GAME_NAME = "Minesweeper";
@@ -51,42 +57,28 @@ public class Main extends Application {
         root.setPrefSize(Tile.SIZE * BOARD_WIDTH, Tile.SIZE * BOARD_WIDTH);
         root.getChildren().add(group);
 
-        //tiles
+        Board board = new Board();
+        tileBoard = board.getTiles();
+
+        BoardView boardView = new BoardView();
+        btnBoard = boardView.getButtons();
+
         for (int x = 0; x < BOARD_WIDTH; x++) {
             for (int y = 0; y < BOARD_WIDTH; y++) {
-                tileBoard[x][y] = new Tile(x, y, false);
-            }
-        }
-
-        //bombs
-        BombGenerator bombGen = new BombGenerator();
-        int[] xCoord = bombGen.getxCoordinates();
-        int[] yCoord = bombGen.getyCoordinates();
-
-        for (int i = 0; i < Main.BOARD_WIDTH; i++) {
-            tileBoard[xCoord[i]][yCoord[i]].setBomb(true);
-        }
-
-        //btns
-        for (int x = 0; x < BOARD_WIDTH; x++) {
-            for (int y = 0; y < BOARD_WIDTH; y++) {
-                Button btn = new Button();
-                btn.setLayoutX(x * Tile.SIZE);
-                btn.setLayoutY(y * Tile.SIZE);
-                btn.setPrefWidth(Tile.SIZE);
-                btn.setPrefHeight(Tile.SIZE);
-
+                //TODO: stronger different btw x/y in array and layoutX/layoutY
+                Button btn = btnBoard[x][y];
                 btn.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        int x = (int) btn.getLayoutX();
-                        int y = (int) btn.getLayoutY();
-                        //Tile tile = new Tile(x, y, false);
-                        Tile tile = tileBoard[x / Tile.SIZE][y / Tile.SIZE];
+                        int xPos = (int) btn.getLayoutX();
+                        int yPos = (int) btn.getLayoutY();
+                        int x = xPos / Tile.SIZE;
+                        int y = yPos / Tile.SIZE;
+                        Tile tile = tileBoard[x][y];
                         if (tile.hasBomb()) {
                             ImageView img = new ImageView(BombGenerator.IMAGE_URL);
-                            img.setLayoutX(x);
-                            img.setLayoutY(y);
+                            img.setLayoutX(xPos);
+                            img.setLayoutY(yPos);
                             img.setFitWidth(Tile.SIZE);
                             img.setFitHeight(Tile.SIZE);
 
@@ -94,17 +86,26 @@ public class Main extends Application {
 
                             gameOver();
                         } else {
-                            ImageView img = getImageView(x, y);
+                            int bombsAround = board.getBombsAround(x, y);
+                            ImageView img = new TileView().getImage(bombsAround);
+
                             if (img != null) {
+                                img.setLayoutX(xPos);
+                                img.setLayoutY(yPos);
+                                img.setFitWidth(Tile.SIZE);
+                                img.setFitHeight(Tile.SIZE);
                                 group.getChildren().add(img);
                             } else {
                                 group.getChildren().add(tile);
+
+                                //open all empty tiles around
+                                Set<Tile> emptyTiles = board.getEmptyTilesAround(x, y);
+                                if (emptyTiles.size() > 0) group.getChildren().addAll(emptyTiles);
                             }
                         }
                     }
                 });
 
-                btnBoard[x][y] = btn;
                 group.getChildren().add(btn);
             }
         }
@@ -154,7 +155,8 @@ public class Main extends Application {
         gameOverStage.show();
     }
 
-    private ImageView getImageView(int x, int y) {
+    //pereneseno
+    /*private ImageView getImageView(int x, int y) {
         int indexX = x / Tile.SIZE;
         int indexY = y / Tile.SIZE;
         Tile tile = tileBoard[indexX][indexY];
@@ -183,9 +185,10 @@ public class Main extends Application {
         img.setFitHeight(Tile.SIZE);
 
         return img;
-    }
+    }*/
 
-    private int getBombsCount(Tile t) {
+    //pereneseno
+    /*private int getBombsCount(Tile t) {
         //exclusion of tiles with bombs
         if (t.hasBomb()) return -1;
 
@@ -255,5 +258,5 @@ public class Main extends Application {
         if (y == tileBoard.length - 1 || x == tileBoard.length - 1) return null;
 
         return tileBoard[x + 1][y + 1];
-    }
+    }*/
 }

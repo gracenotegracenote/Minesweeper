@@ -1,6 +1,5 @@
-package views;
+package models;
 
-import javafx.scene.image.Image;
 import sample.Main;
 
 import java.util.Random;
