@@ -1,6 +1,8 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -29,14 +31,16 @@ public class Board {
         }
     }
 
-    public Set<Tile> getEmptyTilesAround(int x, int y) {
-        Set<Tile> emptyTilesAround = new HashSet<>();
+    //TODO: algorithm efficient?
+    public List<Tile> getEmptyTilesAround(int x, int y) {
+        List<Tile> emptyTilesAround = new ArrayList<>();
 
         tiles[x][y].setChecked(true);
 
         //tile is empty when no bombs around
         Tile[] tiles = {getTileBottomLeft(x, y), getTileBottomCenter(x, y), getTileBottomRight(x, y),
                 getTileLeft(x, y), getTileRight(x, y), getTileBelowLeft(x, y), getTileBelowCenter(x, y), getTileBelowRight(x, y)};
+
         for (int i = 0; i < tiles.length; i++) {
             if (tiles[i] != null) {
                 int xIndex = tiles[i].getXIndex();
@@ -44,9 +48,8 @@ public class Board {
                 if (getBombsAround(xIndex, yIndex) == 0 && tiles[i].isChecked() == false) {
                     emptyTilesAround.add(tiles[i]);
                     tiles[i].setChecked(true);
-                    Set<Tile> list = getEmptyTilesAround(xIndex, yIndex);
+                    List<Tile> list = getEmptyTilesAround(xIndex, yIndex);
                     if (list.size() > 0) emptyTilesAround.addAll(list);
-                    System.out.println("LENGTH = " + list.size());
                 }
             }
         }

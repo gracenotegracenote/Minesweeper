@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import views.BoardView;
 import views.TileView;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -75,6 +76,8 @@ public class Main extends Application {
                         int x = xPos / Tile.SIZE;
                         int y = yPos / Tile.SIZE;
                         Tile tile = tileBoard[x][y];
+
+                        //TODO: replace repeated code to [tile] view class
                         if (tile.hasBomb()) {
                             ImageView img = new ImageView(BombGenerator.IMAGE_URL);
                             img.setLayoutX(xPos);
@@ -87,20 +90,19 @@ public class Main extends Application {
                             gameOver();
                         } else {
                             int bombsAround = board.getBombsAround(x, y);
-                            ImageView img = new TileView().getImage(bombsAround);
+                            TileView tileView = new TileView(xPos, yPos, bombsAround);
+                            group.getChildren().add(tileView);
 
-                            if (img != null) {
-                                img.setLayoutX(xPos);
-                                img.setLayoutY(yPos);
-                                img.setFitWidth(Tile.SIZE);
-                                img.setFitHeight(Tile.SIZE);
-                                group.getChildren().add(img);
-                            } else {
-                                group.getChildren().add(tile);
+                            //open all empty tiles around
+                            if (bombsAround == 0) {
+                                //getEmptyTilesAround() belongs to model or view??
+                                List<Tile> emptyTiles = board.getEmptyTilesAround(x, y);
+                                Set<TileView> tileViews = new HashSet<>();
+                                for (Tile t : emptyTiles) {
+                                    tileViews.add(new TileView(t.getXIndex() * TileView.SIZE, t.getYIndex() * TileView.SIZE, bombsAround));
+                                }
 
-                                //open all empty tiles around
-                                Set<Tile> emptyTiles = board.getEmptyTilesAround(x, y);
-                                if (emptyTiles.size() > 0) group.getChildren().addAll(emptyTiles);
+                                group.getChildren().addAll(tileViews);
                             }
                         }
                     }
@@ -113,6 +115,7 @@ public class Main extends Application {
         return root;
     }
 
+    //TODO: close and exit btns -> exit game
     public void gameOver() {
         Pane gameOverRoot = new Pane();
         gameOverRoot.setPrefWidth(GAMEOVER_BOARD_WIDTH);

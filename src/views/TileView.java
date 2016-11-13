@@ -1,19 +1,28 @@
 package views;
 
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import models.Tile;
+
 
 /**
  * Created by gracenote on 12-Nov-16.
  */
-public class TileView {
-    //TODO: fields?
+public class TileView extends ImageView {
+    public static final int SIZE = 100;
 
-    public ImageView getImage (int bombsCount) {
-        if (bombsCount <= 0) return null;
+    public TileView (double x, double y, int bombsCount) {
+        super(getImageURL(bombsCount));
+        relocate(x, y);
+        setFitWidth(SIZE);
+        setFitHeight(SIZE);
+    }
 
+    private static String getImageURL (int bombsCount) {
         String imageUrl;
         switch(bombsCount) {
+            case 0: imageUrl = "images/0.png"; break;
             case 1: imageUrl = "images/1.png"; break;
             case 2: imageUrl = "images/2.png"; break;
             case 3: imageUrl = "images/3.png"; break;
@@ -25,6 +34,7 @@ public class TileView {
             default: return null;
         }
 
-        return new ImageView(imageUrl);
+        return imageUrl;
+        //return new ImageView(imageUrl);
     }
 }

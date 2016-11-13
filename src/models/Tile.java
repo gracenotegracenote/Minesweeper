@@ -7,27 +7,29 @@ import javafx.scene.shape.Rectangle;
 /**
  * Created by gracenote on 29-Oct-16.
  */
-public class Tile extends Rectangle { // implements Comparable<Tile> {
+public class Tile { //extends Rectangle { implements Comparable<Tile> {
     //TODO: replace to view class/controller
     public static final int SIZE = 100;
 
     private int x;
     private int y;
     private boolean hasBomb;
+    private boolean hasNumber;
     private boolean checked;
 
     public Tile (int xIndex, int yIndex, boolean hasBomb) {
         this.x = xIndex;
         this.y = yIndex;
 
-        //TODO: replace in view class
-        setWidth(SIZE);
+        /*setWidth(SIZE);
         setHeight(SIZE);
         relocate(x * SIZE, y * SIZE);
         setFill(Color.WHITE);
         setStroke(Color.BLACK);
-        setStrokeWidth(SIZE * 0.03);
+        setStrokeWidth(SIZE * 0.03);*/
+
         this.hasBomb = hasBomb;
+        hasNumber = false;
         checked = false;
     }
 
