@@ -3,6 +3,7 @@ package views;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import models.BombGenerator;
 import models.Tile;
 
 
@@ -11,6 +12,14 @@ import models.Tile;
  */
 public class TileView extends ImageView {
     public static final int SIZE = 100;
+
+    //TODO: enum class for tile view with/without bombs??
+    public TileView (double x, double y) {
+        super(BombGenerator.IMAGE_URL);
+        relocate(x, y);
+        setFitWidth(SIZE);
+        setFitHeight(SIZE);
+    }
 
     public TileView (double x, double y, int bombsCount) {
         super(getImageURL(bombsCount));
