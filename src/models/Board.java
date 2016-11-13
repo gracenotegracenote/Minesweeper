@@ -50,6 +50,9 @@ public class Board {
                     tiles[i].setChecked(true);
                     List<Tile> list = getEmptyTilesAround(xIndex, yIndex);
                     if (list.size() > 0) emptyTilesAround.addAll(list);
+                } else if (getBombsAround(xIndex, yIndex) != 0 && tiles[i].isChecked() == false) {
+                    emptyTilesAround.add(tiles[i]);
+                    tiles[i].setChecked(true);
                 }
             }
         }

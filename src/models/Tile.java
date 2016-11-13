@@ -20,17 +20,9 @@ public class Tile { //extends Rectangle { implements Comparable<Tile> {
     public Tile (int xIndex, int yIndex, boolean hasBomb) {
         this.x = xIndex;
         this.y = yIndex;
-
-        /*setWidth(SIZE);
-        setHeight(SIZE);
-        relocate(x * SIZE, y * SIZE);
-        setFill(Color.WHITE);
-        setStroke(Color.BLACK);
-        setStrokeWidth(SIZE * 0.03);*/
-
         this.hasBomb = hasBomb;
-        hasNumber = false;
-        checked = false;
+        this.hasNumber = false;
+        this.checked = false;
     }
 
     public boolean hasBomb() {

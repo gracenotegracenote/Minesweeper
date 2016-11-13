@@ -99,9 +99,9 @@ public class Main extends Application {
                                 List<Tile> emptyTiles = board.getEmptyTilesAround(x, y);
                                 Set<TileView> tileViews = new HashSet<>();
                                 for (Tile t : emptyTiles) {
-                                    tileViews.add(new TileView(t.getXIndex() * TileView.SIZE, t.getYIndex() * TileView.SIZE, bombsAround));
+                                    tileViews.add(new TileView(t.getXIndex() * TileView.SIZE, t.getYIndex() * TileView.SIZE,
+                                            board.getBombsAround(t.getXIndex(), t.getYIndex())));
                                 }
-
                                 group.getChildren().addAll(tileViews);
                             }
                         }
