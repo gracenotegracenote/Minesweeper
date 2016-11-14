@@ -9,8 +9,6 @@ import java.util.Random;
  */
 public class BombGenerator {
     public static final String IMAGE_URL = "images/bomb.jpg"; //TODO: to view class
-    public static final String SAPPER_URL = "images/sapper.png"; //TODO: to view class
-    public static final String SAPPER2_URL = "images/sapper2.png"; //TODO: to view class
 
     private int bombCount;
     private int[] xCoordinates;
@@ -35,13 +33,13 @@ public class BombGenerator {
         }
     }
 
-
+    //TODO: to count percentage of bombs
     public int getBombCount() {
         if (Main.BOARD_WIDTH == 9) {
             return 10;
         }
 
-        return 0;
+        return 1;
     }
 
     public int[] getxCoordinates() {

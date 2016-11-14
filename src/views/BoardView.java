@@ -1,22 +1,21 @@
 package views;
 
 import javafx.scene.control.Button;
-import models.Tile;
+import sample.Main;
 
 /**
  * Created by gracenote on 12-Nov-16.
  */
 public class BoardView {
-    public static final int TILE_SIZE = 100;
-    public static final int BOARD_WIDTH = 9;
+    public static final int TILE_SIZE = 100; //!!!
 
     private Button[][] tiles;
 
     public BoardView() {
-        tiles = new Button[BOARD_WIDTH][BOARD_WIDTH];
+        tiles = new Button[Main.BOARD_WIDTH][Main.BOARD_WIDTH];
 
-        for (int x = 0; x < BOARD_WIDTH; x++) {
-            for (int y = 0; y < BOARD_WIDTH; y++) {
+        for (int x = 0; x < Main.BOARD_WIDTH; x++) {
+            for (int y = 0; y < Main.BOARD_WIDTH; y++) {
                 Button btn = new Button();
                 btn.setLayoutX(x * TILE_SIZE);
                 btn.setLayoutY(y * TILE_SIZE);

@@ -1,23 +1,21 @@
 package models;
 
+import sample.Main;
+
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by gracenote on 12-Nov-16.
  */
 public class Board {
-    public static final int BOARD_WIDTH = 9;
-
     private Tile[][] tiles;
 
     public Board() {
-        tiles = new Tile[BOARD_WIDTH][BOARD_WIDTH];
+        tiles = new Tile[Main.BOARD_WIDTH][Main.BOARD_WIDTH];
 
-        for (int x = 0; x < BOARD_WIDTH; x++) {
-            for (int y = 0; y < BOARD_WIDTH; y++) {
+        for (int x = 0; x < Main.BOARD_WIDTH; x++) {
+            for (int y = 0; y < Main.BOARD_WIDTH; y++) {
                 tiles[x][y] = new Tile(x, y, false);
             }
         }
@@ -26,7 +24,7 @@ public class Board {
         int[] xCoord = bombGen.getxCoordinates();
         int[] yCoord = bombGen.getyCoordinates();
 
-        for (int i = 0; i < BOARD_WIDTH; i++) {
+        for (int i = 0; i < xCoord.length; i++) {
             tiles[xCoord[i]][yCoord[i]].setBomb(true);
         }
     }

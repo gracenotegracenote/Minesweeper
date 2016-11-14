@@ -1,32 +1,29 @@
 package sample;
 
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import models.Board;
-import models.BombGenerator;
 import models.Tile;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import views.BoardView;
+import views.Flag;
 import views.TileView;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Main extends Application {
+    //TODO: configuration data into txt file or JSON
     public static final String GAME_NAME = "Minesweeper";
     public static final String GAME_OVER = "Game over!";
 
-    public static final int BOARD_WIDTH = 9;
+    public static final int BOARD_WIDTH = 10;
     public static final int GAMEOVER_BOARD_WIDTH = 500;
     public static final int GAMEOVER_BOARD_HEIGHT = 100;
     public static final int BTN_WIDTH = 100;
@@ -36,7 +33,6 @@ public class Main extends Application {
     public Group group = new Group();
     public Stage primaryStage = new Stage();
     public Stage gameOverStage = new Stage();
-
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -56,6 +52,7 @@ public class Main extends Application {
     private Parent createContent() {
         Pane root = new Pane();
         root.setPrefSize(Tile.SIZE * BOARD_WIDTH, Tile.SIZE * BOARD_WIDTH);
+
         root.getChildren().add(group);
 
         Board board = new Board();
@@ -66,8 +63,8 @@ public class Main extends Application {
 
         for (int x = 0; x < BOARD_WIDTH; x++) {
             for (int y = 0; y < BOARD_WIDTH; y++) {
-                //TODO: stronger different btw x/y in array and layoutX/layoutY
                 Button btn = btnBoard[x][y];
+                final boolean[] rightClick = {false};
                 btn.setOnMouseClicked((event) -> {
                     MouseButton mouseBtn = event.getButton();
 
@@ -89,7 +86,6 @@ public class Main extends Application {
 
                             //open all empty tiles around
                             if (bombsAround == 0) {
-                                //TODO: getEmptyTilesAround() belongs to model or view??
                                 List<Tile> emptyTiles = board.getEmptyTilesAround(xInd, yInd);
                                 Set<TileView> tileViews = new HashSet<>();
                                 for (Tile t : emptyTiles) { //collect call impossible because of different <types>
@@ -98,13 +94,18 @@ public class Main extends Application {
                                 }
                                 group.getChildren().addAll(tileViews);
                             }
-                        } //right click TODO: second right click to delete flag; background image in view
+                        } //right click
                     } else if (mouseBtn == MouseButton.SECONDARY) {
-                        ImageView background = new ImageView(BombGenerator.SAPPER_URL);
-                        background.setFitWidth(Tile.SIZE - 20);
-                        background.setFitHeight(Tile.SIZE - 20);
-                        btn.setGraphic(background);
-                        //TODO: make button unclickable
+                        Flag flag;
+                        if (rightClick[0] == true) {    //value in array because rightClick is final
+                            rightClick[0] = false;
+                            flag = new Flag(false);
+                        } else {
+                            rightClick[0] = true;
+                            flag = new Flag(true);
+                        }
+
+                        btn.setGraphic(flag);
                     }
                 });
 

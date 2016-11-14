@@ -9,7 +9,7 @@ import javafx.scene.shape.Rectangle;
  */
 public class Tile { //extends Rectangle { implements Comparable<Tile> {
     //TODO: replace to view class/controller
-    public static final int SIZE = 100;
+    public static final int SIZE = 100; //!!!!!
 
     private int x;
     private int y;
