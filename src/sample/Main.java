@@ -13,23 +13,25 @@ import javafx.stage.Stage;
 import views.BoardView;
 import views.Flag;
 import views.TileView;
-
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+//TODO: make frame to set width and height and mine count; store data in settings, restore settings on next launch
 public class Main extends Application {
     //TODO: configuration data into txt file or JSON
     public static final String GAME_NAME = "Minesweeper";
     public static final String GAME_OVER = "Game over!";
 
+    //TODO: board_width to width and height
     public static final int BOARD_WIDTH = 10;
+    public static final int BOARD_HEIGHT = 10;
+
+
     public static final int GAMEOVER_BOARD_WIDTH = 500;
     public static final int GAMEOVER_BOARD_HEIGHT = 100;
     public static final int BTN_WIDTH = 100;
 
-    public Tile[][] tileBoard = new Tile[BOARD_WIDTH][BOARD_WIDTH];
-    public Button[][] btnBoard = new Button[BOARD_WIDTH][BOARD_WIDTH];
+    public Tile[][] tileBoard = new Tile[BOARD_WIDTH][BOARD_HEIGHT];
+    public Button[][] btnBoard = new Button[BOARD_WIDTH][BOARD_HEIGHT];
     public Group group = new Group();
     public Stage primaryStage = new Stage();
     public Stage gameOverStage = new Stage();
@@ -86,18 +88,24 @@ public class Main extends Application {
 
                             //open all empty tiles around
                             if (bombsAround == 0) {
+                                board.resetChecked();
+
+                                long start = System.currentTimeMillis();
                                 List<Tile> emptyTiles = board.getEmptyTilesAround(xInd, yInd);
-                                Set<TileView> tileViews = new HashSet<>();
+                                System.out.println(System.currentTimeMillis() - start);
+
+
                                 for (Tile t : emptyTiles) { //collect call impossible because of different <types>
-                                    tileViews.add(new TileView(t.getXIndex() * TileView.SIZE, t.getYIndex() * TileView.SIZE,
+                                    group.getChildren().add(new TileView(t.getXIndex() * TileView.SIZE, t.getYIndex() * TileView.SIZE,
                                             board.getBombsAround(t.getXIndex(), t.getYIndex())));
                                 }
-                                group.getChildren().addAll(tileViews);
+
+
                             }
                         } //right click
                     } else if (mouseBtn == MouseButton.SECONDARY) {
                         Flag flag;
-                        if (rightClick[0] == true) {    //value in array because rightClick is final
+                        if (rightClick[0]) {    //value in array because rightClick is final
                             rightClick[0] = false;
                             flag = new Flag(false);
                         } else {
